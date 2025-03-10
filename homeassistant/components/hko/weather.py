@@ -18,6 +18,9 @@ from .const import (
     API_FORECAST,
     API_HUMIDITY,
     API_TEMPERATURE,
+    API_UVINDEX,
+    API_RAINFALL,
+    API_WARNING,
     ATTRIBUTION,
     DOMAIN,
     MANUFACTURER,
@@ -70,6 +73,21 @@ class HKOEntity(CoordinatorEntity[HKOUpdateCoordinator], WeatherEntity):
     def humidity(self) -> int:
         """Return the humidity."""
         return self.coordinator.data[API_CURRENT][API_HUMIDITY]
+        
+    @property
+    def condition(self) -> str:
+        """Return the uv index."""
+        return self.coordinator.data[API_CURRENT][API_UVINDEX]
+    
+    @property
+    def condition(self) -> str:
+        """Return the rainfall."""
+        return self.coordinator.data[API_CURRENT][API_RAINFALL]
+    
+    @property
+    def condition(self) -> str:
+        """Return the warning message."""
+        return self.coordinator.data[API_CURRENT][API_WARNING]
 
     async def async_forecast_daily(self) -> list[Forecast] | None:
         """Return the forecast data."""
