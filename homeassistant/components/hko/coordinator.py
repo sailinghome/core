@@ -39,6 +39,9 @@ from .const import (
     API_FORECAST_MIN_TEMP,
     API_FORECAST_WEATHER,
     API_HUMIDITY,
+    API_UVINDEX,
+    API_RAINFALL,
+    API_WARNING,
     API_PLACE,
     API_TEMPERATURE,
     API_VALUE,
@@ -108,7 +111,7 @@ class HKOUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         }
 
     def _convert_current(self, data: dict[str, Any]) -> dict[str, Any]:
-        """Return temperature and humidity in the appropriate format."""
+        """Return temperature, humidity, uv index, rainfall and weather warning in the appropriate format."""
         return {
             API_HUMIDITY: data[API_HUMIDITY][API_DATA][0][API_VALUE],
             API_TEMPERATURE: next(
@@ -118,6 +121,15 @@ class HKOUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                     if item[API_PLACE] == self.location
                 ),
                 0,
+            ),
+            API_UVINDEX: data[API_UVINDEX][API_DATA][0][API_VALUE],
+            API_RAINFALL: [0], next(
+                (
+                    item[API_VALUE]
+                    for item in data[API_RAINFALL][API_DATA]
+                    if item[API_PLACE] == self.location
+                ),
+            API_WARNING: [API_WARNING][API_VALUE],
             ),
         }
 
